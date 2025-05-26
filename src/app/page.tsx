@@ -34,6 +34,9 @@ const isUsed = (id: string) => {
   return Object.values(slots).includes(id);
 };
 
+const handleRemove = (slotId: string) => {
+  setSlots((prev) => ({ ...prev, [slotId]: null }));
+};
 
 
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -84,21 +87,33 @@ const isUsed = (id: string) => {
             <div className="relative w-[200px] h-[600px]">
               <Image src={placa} alt="placa" fill className="object-contain drag-none" />
 
-                <DroppableSlot id="slot1" top="8.4%"  moduleId={slots.slot1} modulesMap={modulesMap} />
+              <DroppableSlot
+                id="slot1"
+                top="8.4%"
+                moduleId={slots.slot1}
+                modulesMap={modulesMap}
+                onRemove={handleRemove}
+              />
 
-                <DroppableSlot id="slot2" top="37.6%"  moduleId={slots.slot2} modulesMap={modulesMap} />
+              <DroppableSlot
+                id="slot2"
+                top="37.6%"
+                moduleId={slots.slot2}
+                modulesMap={modulesMap}
+                onRemove={handleRemove}
+              />
 
-                <DroppableSlot id="slot3" top="66.6%"  moduleId={slots.slot3} modulesMap={modulesMap} />
 
-              {/* Hueco 2 */}
-              <div className="absolute top-[37.5%] left-[12.6%] w-[75%] h-[25%] border border-dashed">
-                
-              </div>
+              <DroppableSlot
+                id="slot3"
+                top="66.6%"
+                moduleId={slots.slot3}
+                modulesMap={modulesMap}
+                onRemove={handleRemove}
+              />
 
-              {/* Hueco 3 */}
-              <div className="absolute top-[66.6%] left-[12.6%] w-[75%] h-[25%] border border-dashed">
-                
-              </div>
+
+
             </div>
           </div>
 

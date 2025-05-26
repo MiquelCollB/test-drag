@@ -9,8 +9,8 @@ export function DraggableImage({ id, src }: { id: string; src: any }) {
     : undefined;
 
   return (
-    <div ref={setNodeRef} style={style} {...listeners} {...attributes} className="cursor-grab">
-      <Image src={src} alt="módulo" width={100} height={100} className="object-contain rounded" />
+    <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+      <Image src={src} alt="módulo" width={100} height={100} className="object-contain rounded cursor-grab" />
     </div>
   );
 }
