@@ -2,7 +2,7 @@
 
 import { useSortable, defaultAnimateLayoutChanges } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/shadCN/button";
 import { X } from "lucide-react"; // Puedes usar otro icono si quieres
 import Image from "next/image";
 

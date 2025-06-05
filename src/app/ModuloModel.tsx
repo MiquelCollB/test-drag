@@ -5,6 +5,7 @@ export function ModuloModel({ position, rotation }: { position: any; rotation: a
 
   return (
     <primitive
+    castShadow receiveShadow
       object={scene}
       position={position}
       rotation={rotation}
