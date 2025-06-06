@@ -44,7 +44,10 @@ export function SortableItem({
         <Image src={src} alt="módulo" fill className="object-contain" />
 
         {/* Handle (puedes usar otra posición o estilo) */}
-        <div {...listeners} className="absolute top-1 right-1 cursor-grab text-gray-500 text-sm">
+        <div
+          {...listeners}
+          className="absolute top-1 right-1 cursor-grab text-gray-500 text-sm"
+        >
           ::
         </div>
 

@@ -1,17 +1,26 @@
 import { useGLTF } from "@react-three/drei";
 
-export function ModuloModel({ position, rotation }: { position: any; rotation: any }) {
-  const { scene } = useGLTF("/models/Intercom_System_0602085624_texture.glb");
+export function ModuloModel({
+  position,
+  rotation,
+  scale = [0.3, 0.3, 0.3], // Valor por defecto
+  moduleId,
+}: {
+  position: any;
+  rotation: any;
+  scale?: [number, number, number];
+  moduleId: string;
+}) {
+  const { scene } = useGLTF(`/models/${moduleId}.glb`);
 
   return (
     <primitive
-    castShadow receiveShadow
+      castShadow
+      receiveShadow
       object={scene}
       position={position}
       rotation={rotation}
-      scale={[0.2, 0.2, 0.2]}
+      scale={scale}
     />
   );
 }
-
-useGLTF.preload("/models/modulo1.glb");
