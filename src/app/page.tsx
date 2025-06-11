@@ -5,6 +5,8 @@ import img1 from "./../../public/modulo-mando.png";
 import img2 from "./../../public/3puls.png";
 import img3 from "./../../public/6puls.png";
 import img4 from "./../../public/marco-nexa.webp";
+import imgGridPlate from "../../../../public/imgGridPlate.webp";
+
 import {
   DndContext,
   DragOverlay,
@@ -28,13 +30,12 @@ export default function Home() {
     "img3",
   ]);
 
-  const [slots, setSlots] = useState<Record<string, string | null>>({
-    slot1: null,
-    slot2: null,
-    slot3: null,
-  });
+  const [slots, setSlots] = useState<Record<string, string | null>>({});
 
-  const [selectedPlate, setSelectedPlate] = useState<string | null>(null); // placa final
+  // Home.tsx
+  const [selectedPlate, setSelectedPlate] = useState<
+    "placa1" | "placa2" | "placaGrid" | null
+  >(null);
   const [activeId, setActiveId] = useState<string | null>(null); // id activo al arrastrar
   const [isOverVisualizer, setIsOverVisualizer] = useState(false); // flag para saber si está encima
 
@@ -49,10 +50,10 @@ export default function Home() {
     return <Loader />;
   }
 
-  useGLTF.preload("/models/Intercom_System_0602085624_texture.glb");
+  // useGLTF.preload("/models/Intercom_System_0602085624_texture.glb");
 
   useGLTF.preload("/models/Intercom_Panel_0602083606_texture.glb");
-  useGLTF.preload("/models/Placa2.glb");
+  // useGLTF.preload("/models/Placa2.glb");
 
   useTexture.preload([
     "/textures/bricks/Bricks101_4K-JPG_Color.jpg",
@@ -81,7 +82,6 @@ export default function Home() {
       return;
     }
 
-    // Si es placa
     if (activeIdStr === "img5") {
       setSelectedPlate("placa1");
       return;
@@ -90,18 +90,31 @@ export default function Home() {
       return;
     }
 
-    // Si se suelta sobre un slot válido
-    if (overIdStr.startsWith("slot")) {
-      setSlots((prev) => ({
-        ...prev,
-        [overIdStr]: activeIdStr,
-      }));
-
-      // Quitar del array de módulos disponibles
-      setAvailableModules((prev) => prev.filter((id) => id !== activeIdStr));
+    // 👉 Nueva placa “grid”
+    if (activeIdStr === "imgGridPlate" && overIdStr === "visualizer") {
+      setSelectedPlate("placaGrid");
+      return;
     }
-  };
 
+    // Slots de grid (grid-0 … grid-24)
+    if (overIdStr?.startsWith("grid-")) {
+      setSlots((prev) => ({ ...prev, [overIdStr]: activeIdStr }));
+      setAvailableModules((prev) => prev.filter((id) => id !== activeIdStr));
+      return;
+    }
+
+    console.log("Dropped:", activeIdStr, "on", overIdStr);
+
+
+    // Slots fijos (slot1, slot2, slot3)
+    if (overIdStr?.startsWith("slot")) {
+      setSlots((prev) => ({ ...prev, [overIdStr]: activeIdStr }));
+      setAvailableModules((prev) => prev.filter((id) => id !== activeIdStr));
+      return;
+    }
+
+    return;
+  };
   const modulesMap: Record<string, StaticImageData> = {
     img1,
     img1b: img1,
@@ -122,34 +135,7 @@ export default function Home() {
         onDragOver={({ over }) => {
           setIsOverVisualizer(over?.id === "visualizer");
         }}
-        onDragEnd={({ active, over }) => {
-          const activeIdStr = active.id.toString();
-          const overIdStr = over?.id?.toString() ?? null;
-
-          setActiveId(null);
-          setIsOverVisualizer(false);
-
-          // Si se suelta sobre visualizer y es placa
-          if (
-            overIdStr === "visualizer" &&
-            (activeIdStr === "img5" || activeIdStr === "img6")
-          ) {
-            setSelectedPlate(activeIdStr === "img5" ? "placa1" : "placa2");
-            return;
-          }
-
-          // 👇 NUEVO: si se suelta sobre un slot
-          if (overIdStr?.startsWith("slot")) {
-            setSlots((prev) => ({
-              ...prev,
-              [overIdStr]: activeIdStr,
-            }));
-            setAvailableModules((prev) =>
-              prev.filter((id) => id !== activeIdStr)
-            ); // 👈 esto
-            return;
-          }
-        }}
+        onDragEnd={handleDragEnd}
       >
         <div className="w-full h-screen overflow-hidden bg-gradient-to-b from-white to-gray-200 p-10">
           {/* HEADER */}

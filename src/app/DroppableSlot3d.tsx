@@ -15,29 +15,26 @@ export const DroppableSlot3D = ({
 }) => {
   const { setNodeRef, isOver, active } = useDroppable({ id });
 
+  console.log("🟩 Slot:", id, "| moduleId:", moduleId);
+
   const isDraggingModule = active?.id?.toString().startsWith("img");
 
   const moduleScales: Record<string, [number, number, number]> = {
-  img1: [0.2, 0.2, 0.1],
-  img2: [4, 4, 1],
-  img3: [4, 4, 0.1],
-  // Añade más si tienes
-};
-
+    img1: [0.2, 0.2, 0.1],
+    img2: [4, 4, 1],
+    img3: [4, 4, 0.1],
+    // Añade más si tienes
+  };
 
   return (
     <group position={position}>
       {/* HTML invisible para detectar el drop, dentro del Canvas pero con un div real */}
-      <Html>
+      <Html position={[0, 0, 0]} center>
         <div
           ref={setNodeRef}
           style={{
-            width: 50,
-            height: 50,
-            position: "absolute",
-            top: 0,
-            left: 0,
-            transform: "translate(-50%, -50%)",
+            width: "50px",
+            height: "50px",
             pointerEvents: "auto",
             opacity: 0,
           }}
@@ -46,13 +43,17 @@ export const DroppableSlot3D = ({
 
       {/* Si ya hay un módulo colocado */}
       {moduleId ? (
+        
+        <>
+        {console.log("🧩 Renderizando módulo:", moduleId, "en slot:", id)}
+
         <group rotation={[Math.PI / 1, 1.57, Math.PI]}>
           <ModuloModel
-  moduleId={moduleId}
-  position={[0, 0, 0]}
-  rotation={[0, -Math.PI / 2, 0]}
-  scale={moduleScales[moduleId] || [0.3, 0.3, 0.3]} // fallback por si falta
-/>
+            moduleId={moduleId}
+            position={[0, 0, 0]}
+            rotation={[0, -Math.PI / 2, 0]}
+            scale={moduleScales[moduleId] || [0.3, 0.3, 0.3]}
+          />
 
           <Html position={[0, 0.3, 0]} center>
             <button
@@ -63,13 +64,21 @@ export const DroppableSlot3D = ({
             </button>
           </Html>
         </group>
+        
+        </>
       ) : (
-        <mesh scale={isOver ? 1.2 : 1}>
-          <boxGeometry args={[0.4, 0.4, 0.05]} />
+        <mesh scale={isOver ? 1.4 : 1}>
+          <boxGeometry args={[0.12, 0.12, 0.02]} />
           <meshStandardMaterial
-            color={isOver ? "orange" : isDraggingModule ? "yellow" : "gray"}
+            color={
+              isOver
+                ? "#ffaa00" // naranja intenso
+                : isDraggingModule
+                ? "#cccc00" // amarillo claro
+                : "gray"
+            }
             transparent
-            opacity={0.4}
+            opacity={0.6}
           />
         </mesh>
       )}

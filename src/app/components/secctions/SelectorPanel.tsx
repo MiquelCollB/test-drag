@@ -1,7 +1,7 @@
 import React from "react";
 import { DraggableImage } from "../../DraggableImage";
 import { StaticImageData } from "next/image";
-
+import imgGridPlate from "../../../../public/imgGridPlate.webp";
 type SelectorPanelProps = {
   slots: Record<string, string | null>;
   availableModules: string[];
@@ -33,12 +33,16 @@ const SelectorPanel: React.FC<SelectorPanelProps> = ({
       </h1>
 
       <h2>Placas</h2>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-2 z-9999">
         {!Object.values(slots).includes("img5") && (
           <DraggableImage id="img5" src={img4} />
         )}
         {!Object.values(slots).includes("img6") && (
           <DraggableImage id="img6" src={img4} />
+        )}
+        {/* Nueva placa Grid */}
+        {!Object.values(slots).includes("imgGridPlate") && (
+          <DraggableImage id="imgGridPlate" src={imgGridPlate} />
         )}
       </div>
 
